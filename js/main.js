@@ -11,6 +11,7 @@ const searchSongs = () => {
 //Display songs from api
 const displaySongs = songs => {
     const songContainer = document.getElementById("song-container");
+    songContainer.innerHTML = "";
     songs.forEach(song => {
         const songDiv = document.createElement('div');
         songDiv.className = 'single-result row align-items-center my-3 p-3';
@@ -23,7 +24,7 @@ const displaySongs = songs => {
             </audio>
             </div>
             <div class="col-md-3 text-md-right text-center">
-                <button onclick="displayLyrics('${song.artist.name}','${song.title}')" class="btn btn-success">Get Lyrics</button>
+                <button onclick="getLyrics('${song.artist.name}','${song.title}')" class="btn btn-success">Get Lyrics</button>
             </div>`;
         songContainer.appendChild(songDiv);
     });
@@ -31,6 +32,14 @@ const displaySongs = songs => {
 
 
 //display lyrics
-const displayLyrics = (artist, title) =>{
-    console.log(artist, title);
+const getLyrics = (artist, title) => {
+    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayLyrics(data.lyrics))
+}
+
+const displayLyrics = lyrics => {
+    const lyricsDiv = document.getElementById('song-lyrics');
+    lyricsDiv.innerText= lyrics;
 }
